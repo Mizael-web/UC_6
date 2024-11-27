@@ -1,0 +1,31 @@
+DER = DIAGRAMA, ENTIDADE(TABELA), RELACIONAMENTO
+
+MER = MODELO, ENTIDADE, RELACIONAMENTO
+
+A CARDINALIDADE SERÁ CONSULTADO NA ENTIDADE POSTERIOR:
+
+PESSOA (1,n)  -------------------> (1,1)PESSOA_PJ ( de pessoa vai ser visto na pessoajs)
+PESSOA (1,n)  <------------------- (1,1)PESSOA_PJ ( da pessoa Js vai ser visto em pessoa)
+
+n = varios
+
+MODELOS:
+CONCEITUAL: ( modelo DER E MER),
+LOGICO, 
+FISICO.
+------------
+
+Na cardinalidade tudo vai depender da regra de negocio...
+Dba - database administrador (salario R$  8.000,00 ),
+
+dados armazenados: 2 byte = 
+1 byte = 8 bit = 2 x 8 = 16 bit
+numero = 1 Bit
+variavel = 1 byte
+1 bit = 0,00001 
+
+calculadora de Bits e Byte
+site de bytes:
+https://www.postgresql.org/docs/current/datatype.html
+
+
