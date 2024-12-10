@@ -37,4 +37,47 @@ site: metropoledigital
 
 https://materialpublic.imd.ufrn.br/curso/disciplina/3/73/6/4
 
+----------------
+03/12/24
+
+sql
+
+createdb xxx ( criar bd xxx)
+dropdb xxx (deletar bc xxx)
+/dt ( listar todas as tabelas)
+/d ( litar a tabela atual)
+/d uruario ( mostrar usuario)
+regras:
+1-not null = atributo não pode ser nulo ( precisa ser obrigatoriamente preenchido),
+2-prmarhy key ( chave primaria)
+3-unique ( atibuto unico so pode existir um registro com aquele dado)
+4-foregn key (  chave estrangeira)
+a chave primaria e chave estrangeira precisa ter a mesma id para não haver incompatibilidade.
+5 - check - verifica se foi passado valor maior de forma a permitir ou não um registro...(salario >0)
+data types = serial = 4 byte
+
+EXEMPLO CRIADO NO ONECOMPILER.COM/POSTGRESQL(GOOGLE)
+
+-- CRIANDO UM BANDO DE DADOS (DATABASE)
+--CREATE DATABASE AULA0312
+
+-- CRIANDO TABELA
+CREATE TABLE IF NOT EXISTS PRODUTO (
+ID INT PRIMARY KEY,
+COD VARCHAR(4) NOT NULL UNIQUE,
+NOME VARCHAR (100) not null,
+PRECO REAL check (preco>0)
+);
+
+--\dt;
+
+\d PRODUTO;
+
+-- DELETANDO UMA BASE DE DADOS
+--DROP DATABASE AULA0312;
+--DELETANDO TABELA
+DROP TABLE PRODUTO;
+
+
+
 
