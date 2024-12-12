@@ -61,6 +61,9 @@ alter table livro add constraint uq_livro_titulo_editora UNIQUE (titulo, id_edit
 -- garantir que as datas de emprestimos e devolução sejam distintas e validas
 
 alter table emprestimo add constraint chk_data_devolucao CHECK (data_devolucao > data_emprestimo);
+
+-- alter table transacao add constraint chk_data_devolucao check ( data_devolução > CURRENT_DATE);
+
 -- \d emprestimo
 
 -- -- \dt
