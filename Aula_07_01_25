@@ -1,0 +1,109 @@
+-- Tabela CLIENTE
+CREATE TABLE IF NOT EXISTS cliente (
+    id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR (11) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    telefone VARCHAR(20),
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP --(realiza um DATE e um TIME em anos, meses, dias, horas, minutos, segundos e frações de um segundo.)
+);
+
+-- Tabela PRODUTO
+CREATE TABLE IF NOT EXISTS produto  (
+    id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    descricao text NOT NULL,
+    preco decimal (10,2) NOT NULL CHECK ( PRECO > 0),
+    qtde INT NOT NULL CHECK ( QTDE > 0),
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP --(realiza um DATE e um TIME em anos, meses, dias, horas, minutos, segundos e frações de um segundo.)
+);
+
+-- Tabela FUNCIONARIO
+CREATE TABLE IF NOT EXISTS funcionario (
+   id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR (11) NOT NULL UNIQUE,
+    cargo VARCHAR (30) NOT NULL,
+    salario decimal (10,2) NOT NULL CHECK ( SALARIO > 0),
+    email VARCHAR(100) NOT NULL UNIQUE,
+    data_admissao TIMESTAMP DEFAULT CURRENT_TIMESTAMP --(realiza um DATE e um TIME em anos, meses, dias, horas, minutos, segundos e frações de um segundo.)
+    );
+
+	--Tabela VENDA
+CREATE TABLE IF NOT EXISTS venda (
+    id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    cliente_id INT  NOT NULL,
+	funcionario_cpf VARCHAR  NOT NULL,
+    data_venda  DATE  DEFAULT CURRENT_TIMESTAMP,
+    total_venda numeric (20,2) NOT NULL CHECK (TOTAL_VENDA > 0),
+    FOREIGN KEY (cliente_id)  references cliente (id) ON DELETE CASCADE,
+	FOREIGN KEY (funcionario_cpf) references funcionario(cpf) ON DELETE SET NULL
+);
+
+
+--Tabela ITEM_VENDA
+CREATE TABLE IF NOT EXISTS item_venda (
+    id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    venda_id INT  NOT NULL,
+   	produto_id INT  NOT NULL,
+    qtde INT NOT NULL CHECK ( QTDE > 0),
+    preco_unitario NUMERIC (10,2) NOT NULL CHECK ( PRECO_UNITARIO > 0),
+    sub_total NUMERIC (20,2) NOT NULL CHECK ( SUB_TOTAL > 0),
+	FOREIGN KEY (venda_id)  references venda (id) ON DELETE CASCADE,
+	FOREIGN KEY (produto_id) references produto(id) ON DELETE SET NULL
+);
+
+-- insert de 5 registros para tabela de cliente de peças automobilistica
+INSERT INTO cliente (nome, cpf, email, telefone) 
+VALUES
+('João Pereira', '12345678901', 'joao.pereira@email.com', '(11) 98765-4321'),
+('Maria Silva', '98765432100', 'maria.silva@email.com', '(21) 91234-5678'),
+('Carlos Santos', '45678912345', 'carlos.santos@email.com', '(31) 99999-1234'),
+('Ana Oliveira', '78912345678', 'ana.oliveira@email.com', '(41) 93456-7890'),
+('Luiz Costa', '32165498701', 'luiz.costa@email.com', '(51) 92345-6789');
+select * from cliente
+
+-- insert de 5 registros pra tabela de produto de peças automobilistica
+INSERT INTO produto (nome, descricao, preco, qtde)
+VALUES
+('Filtro de Óleo', 'Filtro de óleo para motores 1.6 e 2.0', 29.90, 50),
+('Pastilha de Freio', 'Pastilha de freio dianteira para veículos de passeio', 89.90, 30),
+('Bateria Automotiva 60Ah', 'Bateria automotiva de alta durabilidade, 60Ah', 450.00, 20),
+('Pneu Aro 15', 'Pneu radial aro 15 para carros de passeio', 329.90, 15),
+('Velas de Ignição NGK', 'Conjunto de 4 velas de ignição para motores a gasolina', 75.00, 100);
+select * from produto
+
+
+-- 5 resgistros de inserto into para tabela de funcionario de peças automobilista
+INSERT INTO funcionario (nome, cpf, cargo, salario, email) VALUES
+('Carlos Oliveira', '12345678901', 'Vendedor', 3500.00, 'carlos.oliveira@email.com'),
+('Ana Souza', '98765432100', 'Gerente de Vendas', 5200.00, 'ana.souza@email.com'),
+('João Santos', '45678912345', 'Estoquista', 2800.00, 'joao.santos@email.com'),
+('Mariana Lima', '78912345678', 'Assistente Administrativa', 3000.00, 'mariana.lima@email.com'),
+('Lucas Ferreira', '32165498701', 'Técnico de Manutenção', 4000.00, 
+'lucas.ferreira@email.com');
+select * from funcionario
+
+
+
+
+
+-- 5 registros de insert into para tabela de vendas de peças automobilistica
+INSERT INTO venda (venda_id, produto_id, qtde, preco_unitario, sub_total)
+VALUES
+(1, 3, 2, 450.00, 900.00), -- Venda de 2 baterias automotivas
+(2, 1, 5, 25.90, 129.50), -- Venda de 5 filtros de óleo
+(3, 4, 2, 329.90, 659.80), -- Venda de 2 pneus aro 15
+(4, 5, 10, 75.00, 750.00), -- Venda de 10 velas de ignição
+(5, 2, 3, 89.90, 269.70); -- Venda de 3 pastilhas de freio
+select * from venda
+
+-- 5 registros de item_venda de paças automobilistica 
+INSERT INTO item_venda (venda_id, produto_id, qtde, preco_unitario, sub_total) VALUES
+(1, 1, 3, 25.90, 77.70), -- Venda de 3 filtros de óleo
+(1, 4, 1, 329.90, 329.90), -- Venda de 1 pneu aro 15
+(2, 2, 2, 89.90, 179.80), -- Venda de 2 pastilhas de freio
+(3, 3, 1, 450.00, 450.00), -- Venda de 1 bateria automotiva
+(4, 5, 4, 75.00, 300.00); -- Venda de 4 velas de ignição
+select * from item_venda
+
