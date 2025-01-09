@@ -106,3 +106,140 @@ INSERT INTO item_venda (venda_id, produto_id, qtde, preco_unitario, sub_total) V
 (3, 3, 1, 450.00, 450.00), -- Venda de 1 bateria automotiva
 (4, 5, 4, 75.00, 300.00); -- Venda de 4 velas de ignição
 select * from item_venda
+
+- liste o total de vendas realizadas por cada cliente
+
+SELECT cliente.nome, count(venda.cliente_id) as total_vendas
+from venda
+join cliente on venda.cliente_id = cliente.id
+group by cliente.nome
+order by cliente.nome;
+
+--liste o total de vendas realizada por cada funcionário
+
+SELECT funcionario.nome as nome_funcionario, count(venda.funcionario_id) as total_vendas
+from venda
+join funcionario on venda.funcionario_id = funcionario.id
+group by funcionario.nome
+order by funcionario.nome;
+
+-- liste a quantidade total de produtos vendidos por cada venda
+
+SELECT produto.nome, sum(itens_venda.quantidade) as quantidade_total_itens
+FROM 
+itens_venda
+JOIN produto ON itens_venda.produto_id = produto.id
+group by produto.nome;
+
+--5. Liste os clientes que realizaram mais de 5 compras.
+
+-- SELECT venda.cliente_id, sum(itens_venda.quantidade) as qntd_itens_comprados
+-- from venda
+-- join itens_venda on itens_venda.venda_id = venda.id
+-- group by venda.cliente_id;
+
+-- por linha: usa where (antes de agrupar)
+-- por grupo: usa having (depois de agrupar)
+
+select cliente.nome, count(venda.cliente_id) as total
+from venda
+join itens_venda on venda.cliente_id = itens_venda.venda_id
+join cliente on cliente.id = venda.cliente_id
+group by cliente.nome
+having count(total) > 1;
+
+--em having não pode usar apelidos com underline
+
+--6. Liste os produtos que possuem mais de 50 unidades em estoque.
+
+SELECT nome, quantidade_estoque 
+FROM produto 
+WHERE quantidade_estoque > 10
+order by quantidade_estoque desc;
+
+--7. Liste os funcionários que participaram de mais de 10 vendas.
+
+SELECT funcionario.nome, count(venda.funcionario_id) as total_vendas
+FROM venda
+join funcionario on funcionario.id = venda.funcionario_id
+group by funcionario.nome
+having count(venda.funcionario_id) >= 1;
+
+-- 8. Liste os produtos cujo total vendido (quantidade) seja superior a 100 unidades.
+
+SELECT produto.nome, sum(itens_venda.quantidade) as total_vendido
+FROM itens_venda
+JOIN produto on produto.id = itens_venda.produto_id
+group by produto.nome
+having sum(itens_venda.quantidade) >= 1
+order by total_vendido desc;
+
+--9. Calcule o valor total das vendas de cada cliente.
+
+SELECT cliente.nome, sum(venda.total) as total_vendido
+FROM venda
+JOIN cliente on cliente.id = venda.cliente_id
+group by cliente.nome
+order by total_vendido desc;
+
+-- 10.Calcule o valor total das vendas realizadas por cada funcionário.
+
+SELECT funcionario.nome, sum(venda.total) as total_vendido
+FROM venda
+JOIN funcionario on funcionario.id = venda.funcionario_id
+group by funcionario.nome
+order by total_vendido desc;
+
+-- 11.Calcule o total de itens vendidos por venda.
+
+SELECT venda_id, sum(quantidade) as qntd
+FROM itens_venda
+GROUP BY venda_id
+ORDER BY qntd desc;
+
+12.Calcule o total de produtos vendidos agrupados por categoria (se 
+adicionarmos uma coluna de categoria na tabela de produtos).
+
+alter table produto add column categoria varchar (50)
+update produto set categoria = 'FIAT'
+where id in (1,2,3,4,5)
+
+select *from produto;
+select produto.categoria, sum (produto.qtde) as quantidade
+from item_venda
+join produto on item_venda.produto_id = produto.id
+group by produto.categoria;
+
+
+
+13.Calcule o total arrecadado com vendas para cada cliente.
+14.Calcule o preço médio dos produtos em estoque.
+15.Calcule o preço médio dos produtos vendidos por venda.
+16.Calcule a média de salários dos funcionários.
+17.Calcule a média do total das vendas por funcionário.
+18.Conte quantas vendas foram realizadas por cliente.
+select * from venda;
+select cliente_id, count (cliente_id)
+from venda
+group by cliente_id
+
+
+
+19.Conte quantas vendas cada funcionário participou.
+20.Conte quantos produtos estão cadastrados no banco.
+21.Conte quantas vendas foram realizadas em cada dia.
+
+select *from venda
+select to_char (data_venda, 'DD-MM-YYYY') AS DATA_VENDA,  count (data_venda)
+from venda
+group by data_venda
+ 
+
+22.Liste os clientes que realizaram mais de 5 compras, ordenados pelo 
+total de vendas.
+23.Liste os produtos mais vendidos (em quantidade) cujo total vendido 
+ultrapassa 50 unidades.
+24.Calcule a média de preço dos produtos vendidos em cada venda.
+25.Liste os funcionários que participaram de vendas cujo total médio é 
+superior a R$ 5.000,00
+
