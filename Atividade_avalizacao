@@ -1,0 +1,76 @@
+select * from autor;
+select * from bibliotecario;
+select * from categoria;
+select * from emprestimo;
+select * from livro;
+select * from usuario;
+select * from unidade;
+
+--1. Quantidade de bibliotecários responsáveis por cada unidade
+
+SELECT unidade.nome as unidade_nome, COUNT(b.id) as total_bibliotecarios
+FROM unidade
+left JOIN bibliotecario b on b.id_unidade = unidade.id
+GROUP BY unidade.id, unidade.nome;
+
+-- 2. Quantidade de livros disponíveis em cada unidade.
+
+SELECT unidade.nome as unidade_nome, COUNT(id_unidade) as total_livros
+FROM unidade
+left JOIN livro  on id_unidade = unidade.id
+GROUP BY unidade.id, unidade.nome
+
+-- 3. Quantidade de empréstimos realizados em cada unidade.
+
+SELECT unidade.nome as unidade_nome, count (id_livro) as total_emprestimo
+FROM emprestimo
+JOIN livro on emprestimo.id_livro = livro.id
+JOIN  unidade  on id_unidade = unidade.id
+GROUP BY unidade.nome;
+
+-- 5. Quantidade total de usuários cadastrados no sistema.
+
+SELECT  count (id) as total_usuario
+FROM usuario;
+
+
+--6. Quantidade total de livros cadastrados no sistema.
+
+SELECT  count (id) as total_livros
+FROM livro;
+
+--7. Quantidade de livros emprestados por cada usuário. Ordene pelo total encontrado e em 
+--ordem decrescente. 
+
+-- SELECT usuario.nome as usuario_nome, count (id_usuario) as total_emprestimo_usuario
+-- FROM usuario
+-- JOIN emprestimo on id_usuario = usuario.id
+-- GROUP BY usuario.nome
+-- order by usuario.nome desc;
+
+SELECT usuario.nome as usuario_nome, count (emprestimo.id) as total_emprestimos
+FROM emprestimo
+JOIN usuario on usuario.id = emprestimo.id_usuario 
+GROUP BY usuario.nome
+order by  total_emprestimos desc;
+
+select * from autor;
+select * from bibliotecario;
+select * from categoria;
+select * from emprestimo;
+select * from livro;
+select * from usuario;
+select * from unidade;
+
+--8. Quantidade de empréstimos realizados por mês. Use EXTRACT(MONTH FROM 
+--data_emprestimo) para extrair o mês.
+
+SELECT extract (month from data_emprestimo) as mes, count (id) as total_emprestimo
+FROM emprestimo
+GROUP By mes
+order by mes;
+
+--9. Média do número de páginas dos livros cadastrados no sistema.
+
+SELECt round (AVG(numero_paginas), 2) AS media_paginas
+FROM livro;
