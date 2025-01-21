@@ -1,0 +1,38 @@
+
+
+-- DROP TABLE IF EXISTS public.aluno;
+
+CREATE TABLE IF NOT EXISTS public.aluno
+(
+    id integer NOT NULL DEFAULT nextval('aluno_id_seq'::regclass),
+    nome character varying(60) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    telefone character varying(12) COLLATE pg_catalog."default",
+    matricula character(15) COLLATE pg_catalog."default" NOT NULL,
+    curso character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT aluno_pkey PRIMARY KEY (id),
+    CONSTRAINT aluno_matricula_key UNIQUE (matricula)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.aluno
+    OWNER to postgres;
+
+INSERT INTO public.aluno(
+	id, nome, email, telefone, matricula, curso)
+	VALUES (?, ?, ?, ?, ?, ?);
+
+DELETE FROM public.aluno
+	WHERE <condition>;
+
+
+SELECT id, nome, email, telefone, matricula, curso
+	FROM public.aluno;
+
+UPDATE public.aluno
+	SET id=?, nome=?, email=?, telefone=?, matricula=?, curso=?
+	WHERE <condition>;
+
+
+
