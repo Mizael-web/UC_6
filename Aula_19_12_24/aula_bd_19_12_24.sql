@@ -127,4 +127,3 @@ where autor.nome = 'João Cabral'
  
 
 
-  rollback
