@@ -1,0 +1,149 @@
+-- o bando de dados já havia sido cedido, e feito o backup no pgadmin, seria para adicionar os select conforme itens abaixo
+select * from autor;
+select * from bibliotecario;
+select * from categoria;
+select * from emprestimo;
+select * from livro;
+select * from usuario;
+select * from unidade;
+
+--1. Quantidade de bibliotecários responsáveis por cada unidade
+
+SELECT unidade.nome as unidade_nome, COUNT(b.id) as total_bibliotecarios
+FROM unidade
+left JOIN bibliotecario b on b.id_unidade = unidade.id
+GROUP BY unidade.id, unidade.nome;
+
+-- 2. Quantidade de livros disponíveis em cada unidade.
+
+SELECT unidade.nome as unidade_nome, COUNT(id_unidade) as total_livros
+FROM unidade
+left JOIN livro  on id_unidade = unidade.id
+GROUP BY unidade.id, unidade.nome
+
+-- 3. Quantidade de empréstimos realizados em cada unidade.
+
+SELECT unidade.nome as unidade_nome, count (id_livro) as total_emprestimo
+FROM emprestimo
+JOIN livro on emprestimo.id_livro = livro.id
+JOIN  unidade  on id_unidade = unidade.id
+GROUP BY unidade.nome;
+
+-- 5. Quantidade total de usuários cadastrados no sistema.
+
+SELECT  count (id) as total_usuario
+FROM usuario;
+
+
+--6. Quantidade total de livros cadastrados no sistema.
+
+SELECT  count (id) as total_livros
+FROM livro;
+
+--7. Quantidade de livros emprestados por cada usuário. Ordene pelo total encontrado e em 
+--ordem decrescente. 
+
+SELECT usuario.nome as usuario_nome, count (emprestimo.id) as total_emprestimos
+FROM emprestimo
+JOIN usuario on usuario.id = emprestimo.id_usuario 
+GROUP BY usuario.nome
+order by  total_emprestimos desc;
+
+select * from autor;
+select * from bibliotecario;
+select * from categoria;
+select * from emprestimo;
+select * from livro;
+select * from usuario;
+select * from unidade;
+
+-- SELECT usuario.nome as usuario_nome, count (id_usuario) as total_emprestimo_usuario
+-- FROM usuario
+-- JOIN emprestimo on id_usuario = usuario.id
+-- GROUP BY usuario.nome
+-- order by usuario.nome desc;
+
+SELECT usuario.nome as usuario_nome, count (emprestimo.id) as total_emprestimos
+FROM emprestimo
+JOIN usuario on usuario.id = emprestimo.id_usuario 
+GROUP BY usuario.nome
+order by  total_emprestimos desc;
+
+select * from autor;
+select * from bibliotecario;
+select * from categoria;
+select * from emprestimo;
+select * from livro;
+select * from usuario;
+select * from unidade;
+
+--8. Quantidade de empréstimos realizados por mês. Use EXTRACT(MONTH FROM 
+--data_emprestimo) para extrair o mês.
+
+SELECT extract (month from data_emprestimo) as mes, count (id) as total_emprestimo
+FROM emprestimo
+GROUP By mes
+order by mes;
+
+--9. Média do número de páginas dos livros cadastrados no sistema.
+
+SELECT ROUND (AVG(numero_paginas), 2) AS media_pagina
+FROM LIVRO;
+
+-- 10. Quantidade de livros cadastrados em cada categoria. 
+
+SELECT categoria.nome, count (livro.id_categoria ) as total_livro
+from livro
+join categoria on livro.id_categoria = categoria.id
+group by  categoria.nome
+order by  categoria.nome asc;
+
+-- 11. Liste os livros cujos autores possuem nacionalidade americana. 
+select livro.titulo as livro , autor.nome as Nome 
+from autor
+join livro on autor.nome = nome
+WHERE autor.nacionalidade = 'Americana'
+order by autor.nacionalidade;
+
+-- questão melhorada
+SELECT livro.titulo as livro, autor.nome AS autor, autor.nacionalidade as nacionalidade
+FROM livro
+JOIN autor ON autor.id = id_autor
+WHERE autor.nacionalidade = 'Americana'
+ORDER BY livro.titulo ASC;
+
+-- 12. Quantidade de livros emprestados atualmente (não devolvidos). 
+
+SELECT COUNT(*) AS quantidade_livros_emprestados
+FROM emprestimo
+WHERE devolvido = false;
+
+--13. Unidades com mais de 60 livros cadastrados. 
+SELECT unidade.nome AS unidade, COUNT(livro.id) AS total_livros
+FROM unidade
+JOIN livro ON livro.id_unidade = unidade.id
+GROUP BY unidade.nome
+HAVING COUNT(livro.id) > 60;
+
+
+--14. Quantidade de livros por autor. Ordene pelo total e em ordem decrescente. 
+SELECT autor.nome as autor, count ( livro.titulo) as total_livro
+FROm livro
+JOIN autor on autor.id = livro.id_autor
+GROUP BY autor.nome
+ORDER BY total_livro DESC;
+
+--15. Categorias que possuem mais de 5 livros disponíveis atualmente. 
+
+SELECT categoria.nome AS categoria, COUNT(livro.id_categoria) AS total_livro_disponivel
+FROM livro
+JOIN categoria ON livro.id_categoria = categoria.id
+GROUP BY categoria.nome
+HAVING COUNT(livro.id_categoria) > 5;
+
+--16. Unidades com pelo menos um empréstimo em aberto.
+SELECT unidade.nome as unidade, count (emprestimo.devolvido) AS emprestimo_aberto
+from emprestimo
+join unidade on emprestimo.devolvido = devolvido
+WHERE emprestimo.devolvido = false
+GROUP BY unidade.nome;

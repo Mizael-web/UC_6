@@ -1,0 +1,159 @@
+
+-- DROP TABLE IF EXISTS public.aluno;
+
+CREATE TABLE IF NOT EXISTS public.aluno
+(
+    id integer NOT NULL DEFAULT nextval('aluno_id_seq'::regclass),
+    nome character varying(60) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    telefone character varying(12) COLLATE pg_catalog."default",
+    matricula character(15) COLLATE pg_catalog."default" NOT NULL,
+    curso character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT aluno_pkey PRIMARY KEY (id),
+    CONSTRAINT aluno_matricula_key UNIQUE (matricula)
+)
+
+TABLESPACE pg_default;
+
+
+INSERT INTO public.aluno(
+	id, nome, email, telefone, matricula, curso)
+	VALUES (?, ?, ?, ?, ?, ?);
+	
+
+ALTER TABLE IF EXISTS public.aluno
+    OWNER to postgres;
+
+
+select * from vw_aluno
+
+
+SELECT id, nome, email, telefone, matricula, curso
+	FROM public.aluno;
+
+	UPDATE public.aluno
+	SET id=?, nome=?, email=?, telefone=?, matricula=?, curso=?
+	WHERE <condition>;
+
+	DELETE FROM public.aluno
+	WHERE <condition>;
+
+	DELETE FROM public.categoria
+	WHERE id = 22;
+	
+
+	-- criar uma view que retorna todos aluno - conexao
+CREATE VIEW vw_aluno as
+SELECT * from aluno;
+
+-- criar uma view que retorna todos os alunos
+CREATE VIEW vw_cliente as
+SELECT * from cliente;
+
+
+
+
+-- criar uma view que retorna todos os alunos 07 a 09/01/25
+CREATE VIEW vw_cliente as
+SELECT * from cliente;
+
+CREATE VIEW vw_funcionarios as
+SELECT * from funcionario;
+
+
+CREATE VIEW vw_produtos as
+SELECT * from produto;
+
+
+-- atividade avalizaçao
+CREATE VIEW vw_autores as
+SELECT * from autor;
+
+
+CREATE VIEW vw_categorias as
+SELECT * from categoria;
+
+
+CREATE VIEW vw_unidades as
+SELECT * from unidade;
+
+CREATE VIEW vw_livros as
+SELECT * from livro;
+
+
+CREATE VIEW vw_usuarios as
+SELECT * from usuario;
+
+
+
+-- criar procedure para tabela autor
+
+CREATE or replace procedure insert_novo_autor(
+   nome CHAR,
+   nacionalidade CHAR,
+   data_nascimento DATE
+)
+LANGUAGE SQL
+AS $$
+INSERT INTO autor(nome, nacionalidade, data_nascimento)
+VALUES (nome, nacionalidade, data_nascimento);
+$$;
+
+-- apos inserir vai no procedures clica e no insert_novo_autor clica botão direito
+-- vai em scripts exec scripts 
+
+CALL public.insert_novo_autor(
+	<IN nome character>,  --' Paulo Freire',
+	<IN nacionalidade  character>,-- ' brasileiro',
+	<IN data_nascimento  date> -- '1959-05-20'
+	)
+	-- so alterar os valores
+
+	-- criar procedure  categoria
+-- criar procedure
+
+
+CREATE or replace procedure insert_nova_categoria(
+   nome VARCHAR,
+   descricao VARCHAR
+)
+LANGUAGE SQL
+AS $$
+INSERT INTO categoria (nome, descricao)
+VALUES (nome, descricao);
+$$;
+
+-- apos inserir vai no procedures clica e no insert_novo_autor clica botão direito
+-- vai em scripts exec scripts 
+
+CALL public.insert_nova_categoria(
+	<IN nome character varying>,
+	<IN descricao  character varying>
+)
+-- so alterar os valores
+
+-- criar atualizalão
+
+select * from unidade
+
+
+create or replace procedure update_telefone_unidade(
+id_unidade integer,
+telefone_unidade VARCHAR    
+) language sql
+as $$
+update unidade
+set telefone = telefone_unidade
+where id = id_unidade
+$$;
+
+-- criar deletar 
+
+
+create or replace procedure delete_livro(
+id_livro integer, 
+) language sql
+as $$
+delete from livro
+where id = id_livro
+$$;
