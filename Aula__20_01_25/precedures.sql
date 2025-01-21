@@ -1,6 +1,7 @@
 
 
 -- criar procedure para tabela autor
+-- https://www.postgresql.org/docs/current/sql-createprocedure.html
 
 CREATE or replace procedure insert_novo_autor(
    nome CHAR,

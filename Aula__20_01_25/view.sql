@@ -1,5 +1,6 @@
 
 	-- criar uma view que retorna todos aluno - conexao
+	--https://www.postgresql.org/docs/current/sql-createview.html
 CREATE VIEW vw_aluno as
 SELECT * from aluno;
 

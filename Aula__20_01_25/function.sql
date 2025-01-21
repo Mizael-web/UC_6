@@ -17,6 +17,7 @@ $$ language plpgsql;
 SELECT public.total_livro()  
 
 -- criar funcão para pegar total de usuario
+--https://www.postgresql.org/docs/current/sql-createfunction.html
 
 create or replace function listar_usuario () returns
 table (id_user integer, nome_user varchar, email_user varchar, telefone_user varchar, endereco_user text, data_cadastro_user timestamp)
