@@ -223,6 +223,28 @@ AS $$
 	WHERE id = id
 $$;
 
+--4. Crie uma procedure para excluir uma unidade, garantindo que os livros relacionados 
+--sejam removidos. 
+
+delete from unidade 
+where id = 1
+???????
+
+
+
+-- 5. Crie uma procedure para adicionar uma nova categoria à tabela de categorias. 
+select * from categoria
+
+CREATE or replace procedure insert_nova_categoria(
+   nome VARCHAR,
+   descricao VARCHAR
+)
+LANGUAGE SQL
+AS $$
+INSERT INTO categoria (nome, descricao)
+VALUES (nome, descricao);
+$$;
+
 
 
 
