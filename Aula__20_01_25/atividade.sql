@@ -226,10 +226,13 @@ $$;
 --4. Crie uma procedure para excluir uma unidade, garantindo que os livros relacionados 
 --sejam removidos. 
 
-delete from unidade 
-where id = 1
-???????
-
+create or replace procedure delete_unidade(
+id integer
+) language sql
+as $$
+delete from unidade
+where id = id
+$$;
 
 
 -- 5. Crie uma procedure para adicionar uma nova categoria à tabela de categorias. 
