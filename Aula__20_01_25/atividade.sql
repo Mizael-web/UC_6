@@ -160,78 +160,48 @@ INSERT INTO autor(nome, nacionalidade, data_nascimento)
 VALUES (nome, nacionalidade, data_nascimento);
 $$;
 
+
 -- 2. Crie uma procedure para registrar um novo empréstimo, verificando se o livro está
 --disponível.
 
-CREATE or replace procedure insert_novo_emprestimo(
-	IN id_usuario integer,
-	IN id_livro integer,
-	IN data_emprestimo timestamp,
-    IN data_devolucao date,
-	IN devolvido boolean	
-	)
+CREATE or replace procedure procedure_registrar_emprestimo(p_id_usuario INT, p_id_livro INT, p_data_devolucao DATE)
+		
 LANGUAGE SQL
 AS $$
-INSERT INTO emprestimo (id_usuario, id_livro, data_emprestimo, data_devolucao, devolvido)
-VALUES (id_usuario, id_livro, data_emprestimo, data_devolucao, devolvido)
+INSERT INTO emprestimo (id_usuario, id_livro,data_devolucao)
+VALUES (p_id_usuario, p_id_livro, p_data_devolucao);
+UPDATE livro SET disponivel = FALSE
+WHERE ID = p_id_livro;
 $$;
--- livro disponivel por emprestimo
 
-SELECT 
-    emprestimo.id_livro AS emprestimo_id_livro,
-    COUNT(emprestimo.id_livro) AS Livro_disponivel
-FROM emprestimo
-LEFT JOIN livro ON emprestimo.id_livro = livro.id
-GROUP BY emprestimo.id_livro;
+call 
+
+
 
 --3. Crie uma procedure para devolver um livro, atualizando o status de devolução e a
 -- disponibilidade.
 
-CREATE or replace procedure insert_devolucao_emprestimo(
-	IN id_usuario integer,
-	IN id_livro integer,
-	IN data_emprestimo timestamp,
-    IN data_devolucao date,
-	IN devolvido boolean	
-	)
+CREATE OR REPLACE PROCEDURE devolver_livro( id_emprestimo INTEGER, data_devolucao DATE
+)
 LANGUAGE SQL
 AS $$
-INSERT INTO emprestimo (id_usuario, id_livro, data_emprestimo, data_devolucao, devolvido)
-VALUES (id_usuario, id_livro, data_emprestimo, data_devolucao, devolvido)
-$$;
-
-- atualizando o status de devolucao
-
-CREATE OR REPLACE PROCEDURE update_data_devolucao(
-	id_usuario INTEGER,
-	id_livro INTEGER
-) LANGUAGE SQL
-AS $$
-	UPDATE emprestimo	
-	SET data_devolucao = data_devolucao
-	WHERE id = id_usuario
-$$;
-
--- atualilzando a disponibilidade
-CREATE OR REPLACE PROCEDURE update_disponivel(
-	 id INTEGER,
-	 titulo VARCHAR
-) LANGUAGE SQL
-AS $$
-	UPDATE LIVRO
-	SET disponivel = disponivel
-	WHERE id = id
+UPDATE emprestimo 
+SET devolvido = TRUE, data_devolucao = data_devolucao
+WHERE id = id_emprestimo;
+UPDATE livro 
+SET disponivel = TRUE 
+WHERE id = (SELECT id_livro FROM emprestimo WHERE id = id_emprestimo);
 $$;
 
 --4. Crie uma procedure para excluir uma unidade, garantindo que os livros relacionados 
 --sejam removidos. 
 
-create or replace procedure delete_unidade(
-id integer
-) language sql
-as $$
-delete from unidade
-where id = id
+CREATE OR REPLACE PROCEDURE excluir_unidade(id_unidade INTEGER
+)
+LANGUAGE SQL
+AS $$
+DELETE FROM livro WHERE id_unidade = id_unidade;
+DELETE FROM unidade WHERE id = id_unidade;
 $$;
 
 
@@ -240,7 +210,7 @@ select * from categoria
 
 CREATE or replace procedure insert_nova_categoria(
    nome VARCHAR,
-   descricao VARCHAR
+   descricao TEXT
 )
 LANGUAGE SQL
 AS $$
@@ -249,15 +219,66 @@ VALUES (nome, descricao);
 $$;
 
 
+--6. Crie uma procedure para atualizar o telefone de um usuário, identificando-o pelo ID.
+create or replace procedure update_telefone_usuario(
+id_usuario integer,
+telefone_usuario VARCHAR    
+) language sql
+as $$
+update usuario
+set telefone = telefone_usuario
+where id = id_usuario
+$$;
+
+--7. Crie uma procedure para transferir um livro de uma unidade para outra
+create or replace procedure precedure_tranferir_livro (p_id_livro INT, p_id_unidade_destino INT)
+language sql
+as $$
+update livro set id_unidade = p_id_unidade_destino
+where id = p_id_livro;
+$$
+
+
+--8. Crie uma procedure para remover um bibliotecário, verificando se ele está 
+--associado a alguma unidade.
+CREATE OR REPLACE PROCEDURE excluir_bibliotecario(
+    id_bibliotecario INTEGER	
+	)
+LANGUAGE SQL
+AS $$
+DELETE FROM bibliotecario
+WHERE id = id_bibliotecario;
+$$;
 
 
 
 
 
+--9. Crie uma procedure para atualizar a categoria de um livro, identificando-o pelo ID.
+
+create or replace procedure update_categoria_livro(
+id_livro integer,
+id_categoria integer   
+) language sql
+as $$
+update livro
+set  id_categoria = id_categoria
+where id = id_livro
+$$;
 
 
+--10. Crie uma procedure para adicionar um novo usuário ao banco de dados, passando 
+--os dados necessários como parâmetros.
 
-
-
-
-
+CREATE or replace procedure insert_novo_usuario(
+	id INTEGER,
+	nome VARCHAR,
+	email VARCHAR ,
+	endereco TEXT,
+	data_cadastro TIMESTAMP
+	)
+LANGUAGE SQL
+AS $$
+INSERT INTO usuario (id, nome, email, endereco, data_cadastro)
+VALUES (id, nome, email, endereco, data_cadastro);
+$$;
